@@ -4,8 +4,6 @@
 [![MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Paper](https://img.shields.io/badge/ACL-2026-green.svg)](https://arxiv.org/)
 
-> **Learning when and how much to retrieve: An RL framework that adapts retrieval strategies to question type and model scale.**
-
 A reinforcement learning framework for Retrieval-Augmented Generation (RAG) that learns optimal retrieval policies through Deep Q-Learning. Unlike traditional RAG systems with fixed retrieval strategies, Adaptive RAG dynamically decides when to retrieve more documents, when to reformulate queries, and when to answer—achieving 3.2–6.5% higher accuracy while using 14–37% fewer retrievals.
 
 ---
