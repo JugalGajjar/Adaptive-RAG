@@ -1,0 +1,26 @@
+__pycache__/
+.env
+venv/
+env/
+.venv
+.vscode/
+.DS_Store
+logs/
+*.log
+outputs/
+
+# Data files
+data/train.jsonl
+data/val.jsonl
+data/test.jsonl
+data/corpus/corpus.jsonl
+
+# Paper artifacts
+paper/*.pdf
+paper/*.aux
+paper/*.out
+paper/*.bib
+paper/*.tex
+paper/*.sty
+paper/*.bst
+paper/figures/

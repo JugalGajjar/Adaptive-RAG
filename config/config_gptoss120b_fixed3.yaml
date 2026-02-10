@@ -1,0 +1,59 @@
+defaults:
+  - _self_
+  - override hydra/job_logging: default
+  - override hydra/hydra_logging: default
+
+# Experiment: GPT-OSS-120B Groq - Fixed-3 RAG (Cloud Baseline)
+experiment_name: "gpt-oss-120b-groq-fixed-3"
+model_size: "120B"
+strategy: "fixed"
+fixed_retrieval_count: 3
+
+# Data Configuration
+data:
+  data_path: "data/"
+  corpus_path: "data/corpus/"
+  train_path: "data/train.jsonl"
+  val_path: "data/val.jsonl"
+  test_path: "data/test.jsonl"
+  use_embeddings_for_difficulty: true
+  difficulty_levels: ["simple", "medium", "hard"]
+
+# Model Configuration
+model:
+  generator:
+    type: "groq"  # Groq API
+    name: "openai/gpt-oss-120b"  # 120B
+    api_key: "${GROQ_API_KEY}"
+    max_tokens: 512
+    temperature: 0.1
+    requests_per_minute: 25
+    max_retries: 3
+    retry_on_rate_limit: true
+  
+  retriever:
+    type: "dense"
+    embedding_model: "all-MiniLM-L6-v2"
+    top_k_initial: 3
+    retrieval_embeddings_path: "data/embeddings/"
+
+# Fixed RAG Configuration
+fixed_rag:
+  enabled: true
+  retrieval_strategy: "fixed"
+  fixed_retrieval_count: 3
+
+# Evaluation Configuration
+evaluation:
+  checkpoint_path: null
+  output_dir: "results/gpt-oss-120b-groq-fixed-3/"
+  max_samples: 5000  # Fewer due to API
+  num_val_samples: 200
+  metrics: ["accuracy", "retrieval_count", "latency", "energy_estimate"]
+
+# WandB Configuration
+wandb:
+  enabled: true
+  project: "adaptive-rag-opensource"
+  name: "gpt-oss-120b-groq-fixed-3-baseline"
+  tags: ["120b", "gpt-oss", "fixed-3", "groq-api", "baseline"]

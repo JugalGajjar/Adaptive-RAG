@@ -1,0 +1,59 @@
+defaults:
+  - _self_
+  - override hydra/job_logging: default
+  - override hydra/hydra_logging: default
+
+# Experiment: Qwen2.5 7B - Fixed RAG (Baseline)
+experiment_name: "qwen2.5-7b-fixed-3"
+model_size: "7B"
+strategy: "fixed"
+fixed_retrieval_count: 3  # FIXED: Always retrieve 3 documents
+
+# Data Configuration
+data:
+  data_path: "data/"
+  corpus_path: "data/corpus/"
+  train_path: "data/train.jsonl"
+  val_path: "data/val.jsonl"
+  test_path: "data/test.jsonl"
+  use_embeddings_for_difficulty: true
+  difficulty_levels: ["simple", "medium", "hard"]
+
+# Model Configuration
+model:
+  generator:
+    type: "huggingface"
+    name: "Qwen/Qwen2.5-7B-Instruct"
+    device: "cuda"
+    max_tokens: 512
+    temperature: 0.1
+    torch_dtype: "float16"
+    load_in_8bit: false
+    load_in_4bit: false
+  
+  retriever:
+    type: "dense"
+    embedding_model: "all-MiniLM-L6-v2"
+    top_k_initial: 3  # Always retrieve 3
+    retrieval_embeddings_path: "data/embeddings/"
+
+# Fixed RAG Configuration
+fixed_rag:
+  enabled: true
+  retrieval_strategy: "fixed"
+  fixed_retrieval_count: 3  # ALWAYS 3 retrievals
+
+# Evaluation Configuration (NO TRAINING for baseline)
+evaluation:
+  checkpoint_path: null  # No training needed
+  output_dir: "results/qwen2.5-7b-fixed-3/"
+  max_samples: 10000
+  num_val_samples: 500
+  metrics: ["accuracy", "retrieval_count", "latency", "energy_estimate"]
+
+# WandB Configuration
+wandb:
+  enabled: true
+  project: "adaptive-rag-opensource"
+  name: "qwen2.5-7b-fixed-3-baseline"
+  tags: ["7b", "qwen", "fixed", "baseline"]

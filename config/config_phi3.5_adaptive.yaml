@@ -1,0 +1,90 @@
+defaults:
+  - _self_
+  - override hydra/job_logging: default
+  - override hydra/hydra_logging: default
+
+# Experiment: Phi-3.5 3B - Adaptive
+experiment_name: "phi-3.5-3b-adaptive"
+model_size: "3B"
+strategy: "adaptive"
+
+# Data Configuration
+data:
+  data_path: "data/"
+  corpus_path: "data/corpus/"
+  train_path: "data/train.jsonl"
+  val_path: "data/val.jsonl"
+  test_path: "data/test.jsonl"
+  use_embeddings_for_difficulty: true
+  difficulty_levels: ["simple", "medium", "hard"]
+
+# Model Configuration
+model:
+  generator:
+    type: "huggingface"
+    name: "microsoft/Phi-3.5-mini-instruct"  # 3.8B
+    device: "cuda"
+    max_tokens: 512
+    temperature: 0.1
+    torch_dtype: "float16"
+    load_in_8bit: false
+    load_in_4bit: false
+  
+  retriever:
+    type: "dense"
+    embedding_model: "all-MiniLM-L6-v2"
+    top_k_initial: 3
+    retrieval_embeddings_path: "data/embeddings/"
+  
+  policy_network:
+    hidden_size: 256
+    num_layers: 2
+    dropout: 0.1
+    use_attention: true
+
+# Training Configuration
+training:
+  seed: 42
+  batch_size: 32
+  learning_rate: 1e-4
+  gamma: 0.99
+  tau: 0.005
+  buffer_size: 50000
+  warmup_steps: 2000
+  
+  total_episodes: 3000  # Fewer for 3B model
+  episodes_per_epoch: 10
+  updates_per_epoch: 5
+  eval_interval: 50
+  checkpoint_interval: 250
+  checkpoint_dir: "checkpoints/phi-3.5-3b-adaptive/"
+  
+  reward_weights:
+    correctness: 5.0
+    retrieval_penalty: -0.1
+    latency_penalty: -0.01
+    step_penalty: -0.05
+    retrieval_quality: 2.0
+
+# Environment Configuration
+environment:
+  max_retrieval_steps: 5
+  confidence_threshold: 0.7
+  max_query_reformulations: 2
+  early_stopping_patience: 3
+  retrieval_batch_size: 3
+
+# Evaluation Configuration
+evaluation:
+  checkpoint_path: "checkpoints/phi-3.5-3b-adaptive/best_model.pt"
+  output_dir: "results/phi-3.5-3b-adaptive/"
+  max_samples: 10000
+  num_val_samples: 500
+  metrics: ["accuracy", "retrieval_count", "latency", "energy_estimate"]
+
+# WandB Configuration
+wandb:
+  enabled: true
+  project: "adaptive-rag-opensource"
+  name: "phi-3.5-3b-adaptive"
+  tags: ["3b", "phi", "adaptive", "local"]
