@@ -2,7 +2,6 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Paper](https://img.shields.io/badge/ACL-2026-green.svg)](https://arxiv.org/)
 
 A reinforcement learning framework for Retrieval-Augmented Generation (RAG) that learns optimal retrieval policies through Deep Q-Learning. Unlike traditional RAG systems with fixed retrieval strategies, Adaptive RAG dynamically decides when to retrieve more documents, when to reformulate queries, and when to answer—achieving 3.2–6.5% higher accuracy while using 14–37% fewer retrievals.
 
@@ -31,7 +30,7 @@ A reinforcement learning framework for Retrieval-Augmented Generation (RAG) that
 - 199,847 questions from 9 QA datasets
 - Evaluates scaling behavior of adaptive retrieval
 
-### Reproducible Research
+### Reproducible Work
 - Open-source models only (HuggingFace + Groq API)
 - Public datasets (SQuAD, HotpotQA, FEVER, etc.)
 - Total cost: ~$100
@@ -290,15 +289,6 @@ flowchart TD
 - Hard: 3.6–4.1 retrievals (20% increase compared to fixed-3)
 - **Why**: Policy learns to match retrieval to complexity
 
----
-
-## 🎓 Citation
-
-If you use this work in your research, please cite:
-
-```bibtex
-To be updated!
-```
 ---
 
 ## 📄 License
